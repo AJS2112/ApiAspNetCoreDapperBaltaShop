@@ -132,5 +132,17 @@ namespace BaltaStore.Tests
 
         }
 
+        public void CreateCustomer()
+        {
+            // Verifica se o CPF já existe
+            // Verifica se o Email já existe
+            // Criar os VOs
+            // Criar a entidade
+            // Validar as entidades e VOs
+            // Inserir o cliente no banco
+            // Envia convite do Slack
+            // Envia um Email de boas vidas
+        }
+
     }
 }
