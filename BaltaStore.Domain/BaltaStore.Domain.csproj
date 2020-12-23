@@ -3,6 +3,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FluentValidator" Version="*"/>
+    <PackageReference Include="FluentValidator" Version="*" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BaltaStore.Shared\BaltaStore.Shared.csproj" />
   </ItemGroup>
 </Project>
