@@ -1,11 +1,24 @@
+using FluentValidator;
+using FluentValidator.Validation;
+
 namespace BaltaStore.Domain.StoreContext.ValueObjects
 {
-    public class Name
+    public class Name : Notifiable
     {
         public Name(string firstName, string lastName)
         {
             FirstName = firstName;
             LastName = lastName;
+
+            AddNotifications(
+                new ValidationContract()
+                    .Requires()
+                    .HasLen(FirstName, 3, "FirstName", "O nome deve conter pelo menos 3 caracteres")
+                    .HasMaxLen(FirstName, 40, "FirstName", "O nome deve conter no maximo 40 caracteres")
+                    .HasLen(LastName, 3, "LastName", "O sobrenome deve conter pelo menos 3 caracteres")
+                    .HasMaxLen(LastName, 40, "LastName", "O sobrenome deve conter no maximo 40 caracteres")
+            );
+
         }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }

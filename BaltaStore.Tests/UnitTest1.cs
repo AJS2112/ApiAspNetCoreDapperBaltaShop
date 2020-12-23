@@ -1,4 +1,5 @@
 using BaltaStore.Domain.StoreContext.Entities;
+using BaltaStore.Domain.StoreContext.ValueObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BaltaStore.Tests
@@ -9,10 +10,38 @@ namespace BaltaStore.Tests
         [TestMethod]
         public void TestMethod1()
         {
-            //var customer = new Customer("Antonio", "Sucre", "000000000", "ajs21@gmail.com", "0000", "Rua 3712");
-            //var order = new Order(customer);
+            var name = new Name("Antonio", "Sucre");
+            var document = new Document("000000");
+            var email = new Email("ajs21br@gmail.com");
+            var customer = new Customer(name, document, email, "0123456");
 
-            // order.Items.Add();
+            var mouse = new Product("Mouse", "Rato", "image.png", 59.90M, 10);
+            var teclado = new Product("Teclado", "Teclado", "image.png", 159.90M, 10);
+            var impressora = new Product("Impressora", "Impressora", "image.png", 359.90M, 10);
+            var cadeira = new Product("Cadeira", "Cadeira", "image.png", 459.90M, 10);
+
+            var order = new Order(customer);
+            order.AddItem(new OrderItem(mouse, 5));
+            order.AddItem(new OrderItem(teclado, 5));
+            order.AddItem(new OrderItem(impressora, 5));
+            order.AddItem(new OrderItem(cadeira, 5));
+
+            //Realizei o pedido
+            order.Place();
+
+            //Verificar se o pedido é valido
+            var valid = order.Valid;
+
+            //Simular o pagamento
+            order.Pay();
+
+            //Simular o envio
+            order.Ship();
+
+            //Simular o cancelamento
+            order.Cancel();
+
+
 
         }
     }
