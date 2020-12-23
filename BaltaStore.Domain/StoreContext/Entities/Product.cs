@@ -22,5 +22,10 @@ namespace BaltaStore.Domain.StoreContext.Entities
         public string Image { get; private set; }
         public decimal Price { get; private set; }
         public decimal QuantityOnHand { get; private set; }
+
+        public void DecreaseQuantity(decimal quantity)
+        {
+            QuantityOnHand -= quantity;
+        }
     }
 }
