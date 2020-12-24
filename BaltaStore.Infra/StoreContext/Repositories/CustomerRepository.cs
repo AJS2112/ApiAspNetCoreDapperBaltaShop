@@ -1,5 +1,6 @@
 ﻿using BaltaShop.Domain.StoreContext.Repositories;
 using BaltaStore.Domain.StoreContext.Entities;
+using BaltaStore.Domain.StoreContext.Queries;
 using BaltaStore.Infra.StoreContext.DataContexts;
 using Dapper;
 using System;
@@ -36,6 +37,17 @@ namespace BaltaStore.Infra.StoreContext.Repositories
                     .Query<bool>(
                         "spCheckEmail",
                         new { Email = email },
+                        commandType: CommandType.StoredProcedure)
+                    .FirstOrDefault();
+        }
+
+        public CustomerOrdersCountResult GetCustomerOrdersCountResult(string document)
+        {
+            return _context
+                    .Connection
+                    .Query<CustomerOrdersCountResult>(
+                        "spGetCustomerOrdersCount",
+                        new { Document = document},
                         commandType: CommandType.StoredProcedure)
                     .FirstOrDefault();
         }

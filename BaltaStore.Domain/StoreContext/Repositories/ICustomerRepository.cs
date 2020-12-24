@@ -1,4 +1,5 @@
 using BaltaStore.Domain.StoreContext.Entities;
+using BaltaStore.Domain.StoreContext.Queries;
 
 namespace BaltaShop.Domain.StoreContext.Repositories
 {
@@ -7,6 +8,8 @@ namespace BaltaShop.Domain.StoreContext.Repositories
         bool CheckDocument(string document);
         bool CheckEmail(string email);
         void Save(Customer customer);
+
+        CustomerOrdersCountResult GetCustomerOrdersCountResult(string document);
 
     }
 }
