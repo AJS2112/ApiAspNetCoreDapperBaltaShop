@@ -41,6 +41,25 @@ namespace BaltaStore.Infra.StoreContext.Repositories
                     .FirstOrDefault();
         }
 
+        public IEnumerable<ListCustomerQueryResult> Get()
+        {
+            return _context
+                    .Connection
+                    .Query<ListCustomerQueryResult>("SELECT [Id], CONCAT([FirstName],' ',[LastName]) AS [Name], [Document], [Email] FROM [Customer]");
+                    
+        }
+
+        public GetCustomerQueryResult Get(Guid id)
+        {
+            return _context
+                    .Connection
+                    .Query<GetCustomerQueryResult>(
+                        "SELECT [Id], CONCAT([FirstName],' ',[LastName]) AS [Name], [Document], [Email] FROM [Customer] " +
+                        "WHERE [Id] = @Id",
+                        new { Id = id })
+                    .FirstOrDefault();
+        }
+
         public CustomerOrdersCountResult GetCustomerOrdersCountResult(string document)
         {
             return _context
@@ -50,6 +69,19 @@ namespace BaltaStore.Infra.StoreContext.Repositories
                         new { Document = document},
                         commandType: CommandType.StoredProcedure)
                     .FirstOrDefault();
+        }
+
+        public IEnumerable<ListCustomerOrdersQueryResult> GetOrders(Guid id)
+        {
+            return _context
+                    .Connection
+                    .Query<ListCustomerOrdersQueryResult>(
+                        "SELECT c.[Id], CONCAT(c.[FirstName],' ',c.[LastName]) AS [Name], c.[Document], c.[Email], " +
+                        "o.[Number], 1 AS Total" +
+                        "FROM [Customer] c " +
+                        "INNER JOIN [Orders] o ON c.[Id]=o.[CustomerId] " +
+                        "WHERE [Id] = @Id",
+                        new { Id = id });
         }
 
         public void Save(Customer customer)

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BaltaShop.Domain.StoreContext.Repositories;
 using BaltaStore.Domain.StoreContext.Commands.CustomerCommands.Inputs;
 using BaltaStore.Domain.StoreContext.Entities;
+using BaltaStore.Domain.StoreContext.Queries;
 using BaltaStore.Domain.StoreContext.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,55 +13,30 @@ namespace BaltaStore.Api.Controllers
 {
     public class CustomerController : Controller
     {
+        private readonly ICustomerRepository _repository;
+        public CustomerController(ICustomerRepository repository)
+        {
+            _repository = repository;
+        }
         [HttpGet]
         [Route("customers")]
-        public List<Customer> Get()
+        public IEnumerable<ListCustomerQueryResult> Get()
         {
-            var name = new Name("Antonio", "Sucre");
-            var document = new Document("70870129244");
-            var email = new Email("ajs21br@gmail.com");
-            var customer = new Customer(name, document, email, "55555");
-            var customers = new List<Customer>();
-            customers.Add(customer);
-
-            return customers;
+            return _repository.Get();
         }
 
         [HttpGet]
         [Route("customers/{id}")]
-        public Customer GetById(Guid id)
+        public GetCustomerQueryResult GetById(Guid id)
         {
-            var name = new Name("Antonio", "Sucre");
-            var document = new Document("70870129244");
-            var email = new Email("ajs21br@gmail.com");
-            var customer = new Customer(name, document, email, "55555");
-
-            return customer;
+            return _repository.Get(id);
         }
 
         [HttpGet]
         [Route("customers/{id}/orders")]
-        public List<Order> GetOrders()
+        public IEnumerable<ListCustomerOrdersQueryResult> GetOrders(Guid id)
         {
-            var name = new Name("Antonio", "Sucre");
-            var document = new Document("70870129244");
-            var email = new Email("ajs21br@gmail.com");
-            var customer = new Customer(name, document, email, "55555");
-            var order = new Order(customer);
-
-            var mouse = new Product("Mouse Gamer", "Mouse Gamer", "_mouse.jpg", 100M, 10);
-            var monitor = new Product("Monitor Gamer", "Mouse Gamer", "_mouse.jpg", 100M, 10);
-
-            order.AddItem(monitor, 5);
-            order.AddItem(mouse, 5);
-
-            order.Place();
-
-            var orders=new List<Order>();
-            orders.Add(order);
-
-
-            return orders;
+            return _repository.GetOrders(id);
         }
 
         [HttpPost]
