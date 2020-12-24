@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaltaShop.Domain.StoreContext.Repositories;
+using BaltaShop.StoreContext.Handlers;
 using BaltaStore.Domain.StoreContext.Commands.CustomerCommands.Inputs;
 using BaltaStore.Domain.StoreContext.Entities;
 using BaltaStore.Domain.StoreContext.Queries;
@@ -14,9 +15,12 @@ namespace BaltaStore.Api.Controllers
     public class CustomerController : Controller
     {
         private readonly ICustomerRepository _repository;
-        public CustomerController(ICustomerRepository repository)
+        private readonly CustomerHandler _handler;
+
+        public CustomerController(ICustomerRepository repository, CustomerHandler handler)
         {
             _repository = repository;
+            _handler = handler;
         }
         [HttpGet]
         [Route("customers")]
@@ -41,14 +45,14 @@ namespace BaltaStore.Api.Controllers
 
         [HttpPost]
         [Route("customers")]
-        public Customer Post([FromBody]CreateCustomerCommand command)
+        public object Post([FromBody]CreateCustomerCommand command)
         {
-            var name = new Name(command.FirstName, command.LastName);
-            var document = new Document(command.Document);
-            var email = new Email(command.Email);
-            var customer = new Customer(name, document, email, command.Phone);
+            var result = (CreateCustomerCommandResult)_handler.Handle(command);
 
-            return customer;
+            if (_handler.Invalid)
+                return BadRequest(_handler.Notifications);
+
+            return result;
         }
 
         [HttpPut]
