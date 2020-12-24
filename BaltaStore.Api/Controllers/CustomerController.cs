@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaltaShop.Domain.StoreContext.Repositories;
+using BaltaShop.Shared.Commands;
 using BaltaShop.StoreContext.Handlers;
 using BaltaStore.Domain.StoreContext.Commands.CustomerCommands.Inputs;
 using BaltaStore.Domain.StoreContext.Entities;
@@ -24,6 +25,7 @@ namespace BaltaStore.Api.Controllers
         }
         [HttpGet]
         [Route("customers")]
+        [ResponseCache(Location = ResponseCacheLocation.Client , Duration = 60)]
         public IEnumerable<ListCustomerQueryResult> Get()
         {
             return _repository.Get();
@@ -45,13 +47,9 @@ namespace BaltaStore.Api.Controllers
 
         [HttpPost]
         [Route("customers")]
-        public object Post([FromBody]CreateCustomerCommand command)
+        public ICommandResult Post([FromBody]CreateCustomerCommand command)
         {
             var result = (CreateCustomerCommandResult)_handler.Handle(command);
-
-            if (_handler.Invalid)
-                return BadRequest(_handler.Notifications);
-
             return result;
         }
 

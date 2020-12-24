@@ -25,6 +25,8 @@ namespace BaltaStore.Api
         {
             services.AddControllers();
 
+            services.AddResponseCompression();
+
             services.AddScoped<BaltaDataContext, BaltaDataContext>();
             services.AddTransient<ICustomerRepository, CustomerRepository>();
             services.AddTransient<IEmailService, EmailService>();
@@ -48,6 +50,8 @@ namespace BaltaStore.Api
             {
                 endpoints.MapControllers();
             });
+            
+            app.UseResponseCompression();
         }
     }
 }
