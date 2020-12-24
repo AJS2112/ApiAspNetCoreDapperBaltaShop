@@ -32,6 +32,10 @@ namespace BaltaStore.Api
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<CustomerHandler, CustomerHandler>();
 
+            services.AddSwaggerGen(x => {
+                x.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Balta Store API" , Version = "v1" });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +56,13 @@ namespace BaltaStore.Api
             });
             
             app.UseResponseCompression();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Balta Store v1");
+            });
+
         }
     }
 }

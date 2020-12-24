@@ -24,7 +24,7 @@ namespace BaltaStore.Api.Controllers
             _handler = handler;
         }
         [HttpGet]
-        [Route("customers")]
+        [Route("v1/customers")]
         [ResponseCache(Location = ResponseCacheLocation.Client , Duration = 60)]
         public IEnumerable<ListCustomerQueryResult> Get()
         {
@@ -32,21 +32,21 @@ namespace BaltaStore.Api.Controllers
         }
 
         [HttpGet]
-        [Route("customers/{id}")]
+        [Route("v1/customers/{id}")]
         public GetCustomerQueryResult GetById(Guid id)
         {
             return _repository.Get(id);
         }
 
         [HttpGet]
-        [Route("customers/{id}/orders")]
+        [Route("v1/customers/{id}/orders")]
         public IEnumerable<ListCustomerOrdersQueryResult> GetOrders(Guid id)
         {
             return _repository.GetOrders(id);
         }
 
         [HttpPost]
-        [Route("customers")]
+        [Route("v1/customers")]
         public ICommandResult Post([FromBody]CreateCustomerCommand command)
         {
             var result = (CreateCustomerCommandResult)_handler.Handle(command);
@@ -54,7 +54,7 @@ namespace BaltaStore.Api.Controllers
         }
 
         [HttpPut]
-        [Route("customers/{id}")]
+        [Route("v1/customers/{id}")]
         public Customer Put(Guid id, [FromBody] CreateCustomerCommand command)
         {
             var name = new Name(command.FirstName, command.LastName);
@@ -66,7 +66,7 @@ namespace BaltaStore.Api.Controllers
         }
 
         [HttpDelete]
-        [Route("customers/{id}")]
+        [Route("v1/customers/{id}")]
         public object Delete()
         {
             return new { message = "Cliente removido com sucesso!"};
